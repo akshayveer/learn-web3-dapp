@@ -1,4 +1,4 @@
-import {ethers} from 'ethers';
+import {ethers, utils} from 'ethers';
 
 declare let window: {
   ethereum: ethers.providers.ExternalProvider;
@@ -12,10 +12,13 @@ const query = async () => {
     });
 
     // TODO: Define the variables below
-    const chainId = undefined;
-    const blockHeight = undefined;
-    const gasPriceAsGwei = undefined;
-    const blockInfo = undefined;
+    const {chainId} = await provider.getNetwork();
+    const blockHeight = await provider.getBlockNumber();
+    const gasPriceAsGwei = utils.formatUnits(
+      await provider.getGasPrice(),
+      'gwei',
+    );
+    const blockInfo = await provider.getBlockWithTransactions(blockHeight);
 
     if (!chainId || !blockHeight || !gasPriceAsGwei || !blockInfo) {
       throw new Error('Please complete the code');
