@@ -18,10 +18,16 @@ const transfer = async () => {
     const gas_price = ethers.utils.hexlify(
       parseInt(currentGasPrice.toString()),
     );
-
-    const transaction = undefined;
-
-    const hash = undefined;
+    const tx = {
+      from: send_account,
+      to: RECIPIENT,
+      value: ethers.utils.parseEther(AMOUNT),
+      nonce: provider.getTransactionCount(send_account, 'latest'),
+      gasLimit: ethers.utils.hexlify(100000),
+      gasPrice: gas_price,
+    };
+    const transaction = await provider.getSigner().sendTransaction(tx);
+    const hash = transaction;
     const receipt = await hash.wait();
     return {hash: receipt.transactionHash};
   } catch (error) {
